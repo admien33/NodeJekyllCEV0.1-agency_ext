@@ -1,0 +1,31 @@
+{
+  "author": "",
+  "name": "serverNodeGit",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "node": "6.10.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "~3.0.0",
+    "fs-extra": "^3.0.1",
+    "imagemin": "^5.0.0",
+    "imagemin-jpegtran": "^5.0.0",
+    "imagemin-pngquant": "^5.0.0",
+    "moment": "^2.18.1",
+    "node-dir": "^0.1.17",
+    "nodegit": "^0.19.0",
+    "octokat": "^0.6.5",
+    "requirejs": "^2.3.3",
+    "uglify-js": "^2.8.23",
+    "uws": "^0.14.1"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {}
+}

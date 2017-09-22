@@ -1,0 +1,44 @@
+
+NOTE
+
+on each description section, item , must contain : date-publication, order, last_modified, title
+
+fields related to date, must start with 'date', and are the only ones!
+ex : date, date-publication, date-debut-promotion, date-evenement, ...
+	with form.value : current_date_int, empty_date_int ,and regional : current_date_fr, empty_date_fr, ..
+	
+
+
+
+mecanisme COMMENT : 
+
+1 : comment_add_text_from_input
+- in current, when create file/ section, add a form input as comment to ref
+- must be tag input !
+2 : comment_add_text_from_section
+- in a section metadata, when create/display, define a comment common to all items on this section
+3 : input_reference_comment
+- auto, add comment about input value when created to ref
+4: comment_add_text_on_create
+
+
+extra 
+"checked_input" see examples
+"display_depend_on" see examples
+"input_reference_comment" : 
+"input_list_id_value" : implemente type color, see examples
+"section_with_text_content": true,
+"section_with_file_actions_template_page_pref": "add_page",
+"force_not_adapt_path_img_section" 
+
+
+visibility
+
+1. only when create, need options : 
+"show_editor":true,
+"show_on_create_only": true,
+
+2. enabled on create only, then disabled but visible
+"show_editor":true,
+"show_disabled_field":true,
+"show_enabled_on_create_only": true,

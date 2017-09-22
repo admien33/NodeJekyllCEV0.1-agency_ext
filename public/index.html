@@ -1,0 +1,469 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		
+		<meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>JekyllCE-EditorV1.0</title>
+		
+		<link rel="stylesheet" href="css/bootstrap.3.3.6.min.css">
+		<link rel="stylesheet" href="css/font-awesome.4.7.0.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Lato">
+		<link rel="stylesheet" href="css/simplemde.1.11.2.min.css">
+		<link rel="stylesheet" href="css/dropzone.4.3.0.min.css">
+		<link rel="stylesheet" href="assets/js/jquery-ui-1.12.0.custom/jquery-ui.css">
+		<link rel="stylesheet" href="css/style.css">
+
+	</head>
+
+	<body class="container-fluid" data-content="sites">
+		
+		<div class="loading">
+			<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+		</div>
+		<div id="spinner-restart" class="spin-restart u-hidden">
+			<div class="text"><b>You need to manually reboot the local server! Then refresh this page.</b></div>
+			<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+		</div>
+		<div id="spinner-git-update" class="spin-update u-hidden">
+			<div class="text"><b>Please wait server's reply! Your request is being processed... </b></div>
+			<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+		</div>
+		<div id="spinner-git-cancel" class="spin-restart u-hidden">
+			<div class="text"><b>Please wait server's reply! Your request is being processed... </b></div>
+			<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+		</div>
+		
+		<div class="deleting">
+			<div class="text"><b>Please wait, your file is being deleted</b></div>
+			<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+			<progress class="progress progress-striped progress-animated" value="0" max="100"></progress>
+			<div class="percent">0 %</div>
+		</div>
+		
+		<div class="noclick"></div>
+
+		<header class="row">
+			<div class="header-info col-sm-7">		
+				<div class="user-info">
+					<div class="user-name"></div>
+				</div>
+				<div class="title "></div>				
+			</div>
+			<div class="header-extra col-sm-5">
+				<div class="zen-words "></div>
+			</div>	
+		</header>
+	
+		
+		<div class="aside-main row">
+			
+			<aside class="col-sm-2">
+
+				<div id="ShowListAction"></div>
+
+				<div id="ListActionsAside">						
+					<a id="previewsite-id"  class="btn btn-warning btn-sm">						
+						<i class="fa fa-eye" aria-hidden="true"></i> Preview site
+						<!-- <i class="fa fa-spinner fa-pulse"></i> Preview site -->
+
+					</a>
+					<!--  -->
+					<button type="button" class="updatesite btn btn-success btn-sm" data-toggle="modal" data-target="#updateSite" id="update-site-id"><i class="fa fa-plus-circle"></i> Update production Site</button>
+					<button type="button" class="create-item btn btn-warning btn-sm" data-toggle="modal" data-target="#createItem" id="create-item-id"><i class="fa fa-plus-circle"></i> Create new item</button>
+					<button type="button" class="createsection btn btn-warning btn-sm" data-toggle="modal" data-target="#createSection" id="create-section-id"><i class="fa fa-plus-circle"></i> Create new section</button>
+					<button type="button" class="upload btn btn-warning btn-sm" data-toggle="modal" data-target="#uploadImage" id="upload-image-id"><i class="fa fa-cloud-upload"></i> Upload images</button>
+					<button type="button" class=" btn btn-success btn-sm" onclick="$('#rootrepos').toggle();">
+				    <i class="fa fa-list" aria-hidden="true"></i>&nbsp;Root sections
+					</button>
+					<div id="rootrepos" style="display: none">
+					   <ul class="list-unstyled"></ul>
+					</div>
+				</div>
+
+				<div class="contentUpToDate u-hidden">
+					<button type="button" class="btn btn-success" disabled></button>
+				</div>
+
+			</aside>
+			
+			<main class="col-sm-10">
+				<div class="row">	
+					<div class="main-nav">					
+						<div class="breadcrumb">
+						<span class="show-root" title="Root">#</span>
+						</div>
+						<div class="adminMode"></div>
+					</div>
+				</div>
+				<div id="sortableItems" class="u-hidden">	
+		  		<div class="form-group row ">
+				    <div class="col-xs-9 col-sm-3">
+				      <div class="input-group">
+				        <span class="input-group-addon"><i class="fa fa-sort fa-lg" aria-hidden="true"><!-- &nbsp;Sort --></i></span>
+				        <select id="sortListItems" class="form-control">				  				
+				  			</select>
+				      </div>				     
+				    </div>
+				   <!--  <div class="col-sm-2">
+				    	<button id="switcherListItems">disable</button>	
+				    </div> -->
+				  </div>
+				</div>
+
+				<div class="content"></div>
+				<div class="images"></div>	
+
+			</main>
+		</div>
+
+		
+
+
+		<!-- boostrap modals -->		
+
+		<div id="MdImage" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+		    	<div class="modal-header">
+        			<span id="FromUrl" class="u-hidden"><i class="fa fa-link "></i> Insert from url</span>
+        			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          		<span aria-hidden="true"><i class="fa fa-close"></i></span>
+		          		<span class="sr-only">Close</span>
+		      		</button>
+			  	</div>
+					<div class="modal-body">					
+			      <div class="loading">
+							<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+						</div>
+						<div class="back-fm-editor">
+							<button type="button" class="btn btn-success "><i class="fa fa-angle-double-left fa-fw fa-lg"></i> Back Settings</button>
+						</div>
+						<div class="back-select-menu"><!-- ! used in js  --></div>
+        		<div class="images"></div>
+	        	<div class="uploader">
+	        		<button type="button" class="btn btn-success"><i class="fa fa-check"></i> Upload</button>
+	        		<form action="/file-upload" class="dropzone manager-drop" id="MdUploader"></form>	        		
+	        	</div>
+					</div>
+					<div class="uploading">
+						<div class="text"><b>Please wait, your images are being uploaded</b></div>
+						<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+						<progress class="progress progress-striped progress-animated" value="0" max="100"></progress>
+						<div class="percent">0 %</div>
+					</div>
+
+				</div><!-- end .modal-content -->
+			</div>
+		</div>
+
+		<div id="insertUrl" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		 	<div class="modal-dialog">
+		    	<div class="modal-content">
+					<div class="modal-header">
+		      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+		        		</button>
+					</div>
+		      		<div class="modal-body">
+		        		<p>Paste the url for the image you whish to insert</p>
+		        		<div class="row">
+		        			<div class="col-sm-9"><input class="form-control"></div>
+							<div class="col-sm-3"><img src="" class="img-responsive img-thumbnail"></div>
+						</div>						
+				  	</div>
+		      		<div class="modal-footer">
+		      			<button type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-check"></i> Use</button>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<div id="confirmDelete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		 	<div class="modal-dialog">
+		    	<div class="modal-content text-center">
+					<div class="loading">
+						<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+					</div>
+			      	<div class="modal-body">
+			        	<div class="alert alert-danger" role="alert">
+							<h4><i class="fa fa-exclamation-tiangle"></i> Caution!</h4>
+							<div class="lead">Are you sure you want to delete the selected item?</div>
+						</div>
+			     	</div>
+			      	<div class="modal-footer">
+			      		<button type="button" class="btn btn-secondary" data-dismiss="modal">Take me back</button>
+			      		<button id="Confirm" type="button" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+			      	</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<div id="displayMeta" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		  	<div class="modal-dialog">
+		    	<div class="modal-content">
+					<div class="modal-header">
+			      		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          		<span aria-hidden="true"><i class="fa fa-close"></i></span>
+			        	</button>
+					</div>
+			      	<div class="modal-body">
+			      		<div class="all-forms"></div>
+			      		<div class="image-form"></div>
+			      	</div>
+			     	<div class="modal-footer">
+			      		<button type="button" class="btn btn-success" disabled><i class="fa fa-chek"></i> Modify</button>
+			      	</div>
+		    	</div>
+			</div>
+		</div>
+
+		<div id="Editors" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+		    	<div class="modal-content text-center">
+		    		<div class="modal-header">
+		      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+		        		</button>
+		     		 </div>
+					<div class="modal-body">
+		        		<div class="lead">Choose the editor you'll like to use for this file</div>
+		      		</div>
+		      		<div class="modal-footer">
+				      	<button type="button" class="btn btn-secondary html" data-editor="html">HTML</button>
+				      	<button type="button" class="btn btn-secondary md" data-editor="md">MarkDown</button>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<div id="createItem" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		 	<div class="modal-dialog">
+		    <div class="modal-content">
+					<div class="modal-header">
+	    			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+	      		</button>
+					</div>
+		      <div class="modal-body">		        	
+						<div class="all-forms"></div>
+			      <div class="image-form"></div>
+					</div>
+      		<div class="modal-footer">
+      			<button type="button" class="btn btn-success" disabled><i class="fa fa-ban"></i></button>
+      		</div>
+		    </div>
+		  </div>
+		</div>
+		
+		<div id="createSection" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		 	<div class="modal-dialog">
+		    <div class="modal-content">
+					<div class="modal-header">
+	    			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+	      		</button>
+					</div>
+		      <div class="modal-body">
+		      	<div class="all-forms"></div>
+		      	<div class="image-form"></div>
+					</div>
+      		<div class="modal-footer">
+      			<button type="button" class="btn btn-success" disabled><i class="fa fa-ban"></i></button>
+      		</div>
+	    	</div>
+	  	</div>
+		</div>
+
+		<div id="uploadImage" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+		        		</button>
+					</div>
+					<div class="modal-body">
+						<div class="uploader">
+			        		<button type="button" class="btn btn-success"><i class="fa fa-check"></i> Upload</button>
+			        		<form action="/file-upload" class="dropzone addimage-drop" id="addFromFolder"></form>
+			        	</div>
+					</div>
+					<div class="uploading">
+						<div class="text"><b>Please wait, your images are being uploaded</b></div>
+						<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+						<progress class="progress progress-striped progress-animated" value="0" max="100"></progress>
+						<div class="percent">0 %</div>
+					</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<div id="Uploading" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="noclick"></div>
+			<div class="modal-dialog">
+				<div class="modal-content">
+			  		<div class="modal-header">
+			    		<span class="noshow">Uploading <span class="percent">0 %</span></span>
+			  			<button type="button" class="close">
+			      			<span aria-hidden="true"><i class="fa fa-minus"></i></span>
+			    		</button>
+					</div>
+					<div class="modal-body text-center">
+						<div class="text">
+							<p>Great!! your images are being uploaded. Please note this may take a while depending on the images size.</p>
+							<p>You can minimize this message and continue working, but please <b>DO NOT</b> close or refresh the browser window, you'll be notified when the upload is complete.</p>
+						</div>
+						<div class="spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>
+						<progress class="progress progress-striped progress-animated" value="0" max="100"></progress>
+						<div class="percent">0 %</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="UploadSuccess" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+		    <div class="modal-content">
+      		<div class="modal-header">
+      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          		<span aria-hidden="true"><i class="fa fa-close"></i></span>
+        		</button>
+					</div>
+					<div class="modal-body text-center">
+						<div class="text">
+							<p></p><p></p>
+							<div class="lead">Your image(s) have been successfully uploaded.</div>
+							<p></p><p></p>
+						</div>
+					</div>
+				</div>
+		  </div>
+		</div>
+
+		<div id="updateSite" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		 	<div class="modal-dialog">
+		    <div class="modal-content">
+					<div class="modal-header">
+      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+        		</button>
+					</div>
+      		<div class="modal-body">
+      			<!-- <div class="mergeBtn"></div> -->
+      			<div class="list-group">
+		      		<div class="files"></div>
+		      	</div>		        		
+					</div>
+		      <div class="modal-footer"></div>
+		    </div>
+		  </div>
+		</div>
+
+		<div id="UpdateSuccess" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+	    	<div class="modal-content">
+      		<div class="modal-header">
+      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+        		</button>
+					</div>
+					<div class="modal-body text-center">
+						<div class="text">
+							<p></p><p></p>
+							<div class="lead">Your site has been successfully updated.</div>
+							<p></p><p></p>
+						</div>
+					</div>
+				</div>
+		  </div>
+		</div>
+
+		<div id="confirmCancelUpdate" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		 	<div class="modal-dialog">
+		    <div class="modal-content text-center">
+					<div class="loading">
+						<div class="spinner">
+							<div class="double-bounce1"></div>
+							<div class="double-bounce2"></div>
+						</div>
+					</div>
+			    <div class="modal-body">
+			    	<div class="alert alert-danger" role="alert">
+							<h4><i class="fa fa-exclamation-tiangle"></i> Caution!</h4>
+							<div class="lead">Are you sure you want to delete these last updates?</div>
+							<div class="lead">Info : the local server must be manually rebooted after</div>
+						</div>					
+						<!-- <div class="container">
+					    <div class="row-fluid">
+								<div class="form-group text-left">
+									<fieldset>
+										<label>
+											<input type="checkbox" id="ReinitForceClone" value="false">Force clone
+										</label>
+										<small class="form-text text-muted" id=""><strong style="color:#5BC0DE;"> *In case of any trouble.</strong></small>
+									</fieldset>
+								</div>
+							</div>					
+						</div> -->
+			    </div>
+	      	<div class="modal-footer">
+	      		<button type="button" class="btn btn-secondary" data-dismiss="modal">Take me back</button>
+	      		<button id="Confirm" type="button" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+	      	</div>
+		    </div>
+		  </div>
+		</div>
+
+		<div id="CancelUpdateSuccess" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+		    <div class="modal-content">
+      		<div class="modal-header">
+      			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          			<span aria-hidden="true"><i class="fa fa-close"></i></span>
+        		</button>
+					</div>
+					<div class="modal-body text-center">
+						<div class="text">
+							<p></p><p></p>
+							<div class="lead">Your last updates have been successfully deleted.</div>
+							<div class="lead">You need to manually reboot the local server!.</div>
+							<p></p><p></p>
+						</div>
+					</div>
+				</div>
+		  </div>
+		</div>
+		
+		
+
+		<footer>
+			<!-- Javascript -->
+			<script src="assets/js/jquery-2.2.4.min.js"></script>
+			<script src="assets/js/tether.1.4.0.min.js"></script>	
+			<script src="assets/js/bootstrap.3.3.6.min.js"></script>
+			<!-- local, standard with plugins :  Optional plugin Justify Optional plugin Source Dialog Optional plugin Widget -->
+			<script src="assets/js/ckeditor_4.5.10min_image_modif/ckeditor.js"></script> 			
+			<script src="assets/js/simplemde.1.11.2.min.js"></script>
+			<script src="assets/js/jquery-ui-1.12.0.custom/jquery-ui.js"></script>
+			<script src="assets/js/jquery-ui-1.12.0.custom/jquery.ui.datepicker-fr.js"></script>
+			<script src="assets/js/jquery.mousewheel.3.1.13.min.js"></script>
+			<script src="assets/js/dropzone.4.3.0.min.js"></script>
+			<script src="bower_components/octokat/dist/octokat.js"></script>			
+			<script src="assets/js/moment-with-fr.2.12.0.min.js"></script>
+			<script src="assets/js/Sortable-2017-03-12.js"></script>			
+			<!-- config file -->
+			<script src="config/config_agency_ext.js"></script>
+			<script src="config/config_sortable_default.js"></script>	
+			<!-- script js -->
+			<script src="js/oktokat_interface.js"></script>
+			<script src="js/main.js"></script>			
+			<script src="js/sortable_custom.js"></script>
+			<script src="js/table_flex_sortable_items.js"></script>
+
+		</footer>
+
+	</body>
